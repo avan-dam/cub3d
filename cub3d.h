@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 17:16:47 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 20:23:41 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/15 19:44:03 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h>
-# include <stdlib.h>
+# include <unistd.h>
 
 typedef struct		s_sto
 {
@@ -242,6 +242,11 @@ void				ft_zero_sprite_struct(t_sprite *sprite, int i);
 void				start_value_sprite(t_master *big);
 void				ft_zero_all(t_master *big);
 char				*ft_substr(char *s, int start, int len);
-int					ft_save(t_master *big);
+int				    ft_start_save(t_master *big);
+void  			    ft_bitheader(t_master *big);
+void				ft_padding(int fd, int len);
+int					ft_len_hx(long int i);
+void				ft_puthx(long int i, int fd);
+char				*ft_bzero_cub3d(int n);
 
 #endif

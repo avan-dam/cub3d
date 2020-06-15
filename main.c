@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:45 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 10:54:04 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/15 19:38:04 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,8 @@ int		main(int argc, char **argv)
 	i = 0;
 	ft_zero_struct(&mys);
 	if ((argc == 3) && (ft_strcmp(argv[2], "--save") == 0))
-		mys.save = 1;
-	if ((argc != 2) && (mys.save != 1))
+		mys.save = open("screenshot.bmp",  O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+	if ((argc != 2) && (mys.save == 0))
 		return (error_text(&mys, "wrong number of arguments", 1));
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
@@ -140,5 +140,13 @@ int		main(int argc, char **argv)
 		mys.error = ft_strdup("open failed");
 		return (ft_error(&mys));
 	}
+	// if (mys.save != 0)
+	// {
+	// 	if (close(mys.save) == -1)
+	// 	{
+	// 		mys.error = ft_strdup("open failed");
+	// 		return (ft_error(&mys));
+	// 	}
+	// }
 	return (1);
 }

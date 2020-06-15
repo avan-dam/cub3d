@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:46 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 01:00:34 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/15 19:38:45 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,9 @@ int		start_raycastin(t_sto *mys)
 
 	ft_sort_big_struct(&big, mys);
 	big.img.mlx = mlx_init();
+	if (big.mys.save != 0)
+		return(ft_start_save(&big));
 	check_resize(&big);
-	if (ft_save(&big) == 1)
-		return (1);
 	if (start_pos(&big, 0, 0) == -1)
 		return (-1);
 	big.img.mlx_win = mlx_new_window(big.img.mlx, big.mys.r[0],
