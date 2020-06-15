@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 17:00:14 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 17:55:43 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/11 23:36:58 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int		fill_res(char *line, t_sto *mys, int i, int j)
 {
-	int		number;
+	long int		number;
 
 	number = 0;
 	if (mys->map != NULL || mys->r[0] != 0)

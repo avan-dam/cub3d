@@ -6,36 +6,54 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:04 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 18:58:55 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/12 01:14:05 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "mlx.h"
 
-void	ft_swap(int *x, int *y)
+int		ft_load_sprite(t_master *big)
 {
-	int	temp;
+	char	*end;
 
-	temp = *x;
-	*x = *y;
-	*y = temp;
+	end = ft_substr(big->mys.s, ft_strlen(big->mys.s) - 3, 3);
+	if (ft_strcmp("png", end) == 0)
+	{
+		big->img.sprite = mlx_png_file_to_image(big->img.mlx, big->mys.s,
+		&big->img.img_width5, &big->img.img_height5);
+	}
+	else if (ft_strcmp("xpm", end) == 0)
+	{
+		big->img.sprite = mlx_xpm_file_to_image(big->img.mlx, big->mys.s,
+		&big->img.img_width5, &big->img.img_height5);
+	}
+	else
+		return (error_text(&big->mys, "error in loading sprite", 0));
+	free(end);
+	big->img.addrsprite = mlx_get_data_addr(big->img.sprite,
+	&big->img.bits_per_pixel5, &big->img.line_length5, &big->img.endian2);
+	return (1);
 }
 
-void	sort_sprites(int *sprite_ord, float *sprite_dist, int numb)
+int		sort_sprites(float *sprite_dist, int numb, t_master *big)
 {
 	int	i;
 	int	j;
+	int	temp;
 
-	i = -1;
-	j = -1;
+	i = 0;
+	j = 0;
 	while (i < numb - 1)
 	{
 		while (j < numb - i - 1)
 		{
-			if (sprite_dist[sprite_ord[j]] < sprite_dist[sprite_ord[j + 1]])
+			if (sprite_dist[big->sprite.order[j]] <
+			sprite_dist[big->sprite.order[j + 1]])
 			{
-				ft_swap(&sprite_ord[j], &sprite_ord[j + 1]);
+				temp = big->sprite.order[j];
+				big->sprite.order[j] = big->sprite.order[j + 1];
+				big->sprite.order[j + 1] = temp;
 				j = -1;
 				i = 0;
 			}
@@ -43,6 +61,7 @@ void	sort_sprites(int *sprite_ord, float *sprite_dist, int numb)
 		}
 		i++;
 	}
+	return (0);
 }
 
 /*
@@ -87,8 +106,8 @@ void	start_value_sprite(t_master *big)
 
 void	sprite_working(t_master *big)
 {
-	int	tex_x;
-	int	y;
+	int		tex_x;
+	int		y;
 
 	big->sprite.stripe = big->sprite.draw_start_x;
 	while (big->sprite.stripe < big->sprite.draw_end_x)
@@ -112,32 +131,31 @@ void	sprite_working(t_master *big)
 	}
 }
 
-void	ft_sprite_put(t_master *big)
+int		ft_sprite_put(t_master *big, int i)
 {
-	int			i;
 	int			order[big->sprite.numbsprite];
 	float		sprite_dist[big->sprite.numbsprite];
 
-	i = 0;
+	big->sprite.order = order;
 	while (i < big->sprite.numbsprite)
 	{
-		order[i] = i;
-		sprite_dist[i] = ((big->ray.pos_x - big->sprite.sprites[i][0]) *
-		(big->ray.pos_x - big->sprite.sprites[i][0]) + (big->ray.pos_y -
-		big->sprite.sprites[i][1]) * (big->ray.pos_y -
-		big->sprite.sprites[i][1]));
+		big->sprite.order[i] = i;
+		sprite_dist[i] = ((big->ray.pos_x - big->sprite.sprites[i][1]) *
+		(big->ray.pos_x - big->sprite.sprites[i][1]) + (big->ray.pos_y -
+		big->sprite.sprites[i][0]) * (big->ray.pos_y -
+		big->sprite.sprites[i][0]));
 		i++;
 	}
-	sort_sprites(order, sprite_dist, big->sprite.numbsprite);
-	i = 0;
+	i = sort_sprites(sprite_dist, big->sprite.numbsprite, big);
 	while (i < big->sprite.numbsprite)
 	{
-		ft_zero_sprite_struct(&big->sprite, 0);
-		big->sprite.x = big->sprite.sprites[order[i]][1] - big->ray.pos_x + 0.5;
-		big->sprite.y = big->sprite.sprites[order[i]][0] - big->ray.pos_y + 0.5;
+		big->sprite.x = big->sprite.sprites[big->sprite.order[i]][1]
+		- big->ray.pos_x + 0.5;
+		big->sprite.y = big->sprite.sprites[big->sprite.order[i]][0]
+		- big->ray.pos_y + 0.5;
 		start_value_sprite(big);
 		sprite_working(big);
 		i++;
 	}
-	ft_zero_sprite_struct(&big->sprite, 0);
+	return (1);
 }

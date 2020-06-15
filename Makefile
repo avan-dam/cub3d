@@ -6,7 +6,7 @@
 #    By: avan-dam <avan-dam@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/03/09 11:50:01 by avan-dam      #+#    #+#                  #
-#    Updated: 2020/06/08 17:01:55 by Amber         ########   odam.nl          #
+#    Updated: 2020/06/12 17:35:42 by Amber         ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,11 @@ NAME = cub3d
 SRCS = main.c ft_sort_my_map.c check_map_valid.c raycasting.c floor_ceiling.c \
 		zero_structs.c zero_structs_more.c moving.c texture.c start_pos.c \
 		sprite_me.c sprites_more.c raycasting_more.c ft_split_map.c cub_info.c \
-		moving_more.c main_more.c error.c
+		moving_more.c main_more.c error.c save_bp.c
 
 OFILES = $(SRCS:.c=.o)
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra -O3 -fsanitize=address -fno-omit-frame-pointer
 
 INCLUDE = cub3d.h
 
@@ -30,8 +30,8 @@ $(NAME): $(OFILES)
 	cp mlx/libmlx.dylib .
 	make -C gnl/
 	cp gnl/libgnl.a .
-	$(CC) -Lmlx -lmlx -Lgnl -lgnl -framework OpenGL \
-	-framework AppKit -o $(NAME) $(OFILES)
+	gcc -Lmlx -lmlx -Lgnl -lgnl -framework OpenGL \
+	-framework AppKit -o $(NAME) $(OFILES) $(FLAGS)
 
 %.o: %.c $(INCLUDE)
 	gcc -Imlx -Ignl $(FLAGS) -c $< -o $@
@@ -49,3 +49,5 @@ fclean: clean
 	/bin/rm -f $(NAME)
 
 re: fclean all
+
+.PHONY: all clean fclean re

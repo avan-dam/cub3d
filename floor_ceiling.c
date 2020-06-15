@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 17:00:09 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 12:05:00 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/12 00:25:44 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,16 @@ void			ft_draw_ceiling(t_master *big, int y, int x, char *dst)
 	i = 0;
 	while (i < y)
 	{
-		dst = big->img.addr + (i * big->img.line_length + x *
-		(big->img.bits_per_pixel / 8));
+		if (big->move.counter % 2 == 0)
+		{
+			dst = big->img.addr + (i * big->img.line_length + x *
+			(big->img.bits_per_pixel / 8));
+		}
+		else
+		{
+			dst = big->sprite.addr + (i * big->img.line_length + x *
+			(big->img.bits_per_pixel / 8));
+		}
 		*(unsigned int*)dst = big->mys.ceilingcolor;
 		i++;
 	}
@@ -42,8 +50,16 @@ void			ft_draw_floor(t_master *big, int y2, int x, char *dst)
 {
 	while (y2 < big->mys.r[1])
 	{
-		dst = big->img.addr + (y2 * big->img.line_length + x *
-		(big->img.bits_per_pixel / 8));
+		if (big->move.counter % 2 == 0)
+		{
+			dst = big->img.addr + (y2 * big->img.line_length + x *
+			(big->img.bits_per_pixel / 8));
+		}
+		else
+		{
+			dst = big->sprite.addr + (y2 * big->img.line_length + x *
+			(big->img.bits_per_pixel / 8));
+		}
 		*(unsigned int*)dst = big->mys.floorcolor;
 		y2++;
 	}

@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:41 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 17:34:51 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/15 19:20:58 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	ft_find_me_sprite_color(t_master *big, int tex_x, int y)
 	int		d;
 	int		tex_y;
 
+	dst = NULL;
 	d = (y) * 256 - big->mys.r[1] * 128 + big->sprite.height * 128;
 	tex_y = (int)(((d * big->img.img_height5) / big->sprite.height) / 256);
 	dst = big->img.addrsprite + (tex_y * big->img.line_length5 + tex_x *
@@ -85,18 +86,48 @@ void	ver_dot_sprite(int x, int y, t_master *big)
 {
 	char	*dst;
 
-	// if (big->img.color_sprite != 0x00FFFFFF)
-	// {
-		dst = big->img.addr + (y * big->img.line_length + x *
-		(big->img.bits_per_pixel / 8));
+	dst = NULL;
+	// if ((big->img.color_sprite != 0x00FFFFFF) &&
+	// if ((big->img.color_sprite != 0x000000) &&
+	if (big->img.color_sprite != 0xFF000000)
+	{
+		if (big->move.counter % 2 == 0)
+		{
+			dst = big->img.addr + (y * big->img.line_length + x *
+			(big->img.bits_per_pixel / 8));
+		}
+		else
+		{
+			dst = big->sprite.addr + (y * big->img.line_length + x *
+			(big->img.bits_per_pixel / 8));
+		}
 		*(unsigned int*)dst = big->img.color_sprite;
-	// }
+	}
 }
 
-void	ft_load_sprite(t_master *big)
+char	*ft_substr(char *s, int start, int len)
 {
-	big->img.sprite = mlx_png_file_to_image(big->img.mlx, big->mys.s,
-	&big->img.img_width5, &big->img.img_height5);
-	big->img.addrsprite = mlx_get_data_addr(big->img.sprite,
-	&big->img.bits_per_pixel5, &big->img.line_length5, &big->img.endian);
+	char	*substr;
+	int		j;
+	int		slen;
+
+	j = 0;
+	if (s == NULL)
+		return (NULL);
+	slen = ft_strlen(s);
+	if (start > slen)
+		return (ft_strdup(""));
+	if (start + len > slen)
+		len = ft_strlen(s) - start;
+	substr = (char *)malloc(sizeof(char) * (len + 1));
+	if (substr == NULL)
+		return (NULL);
+	while (j < len && s[start] != '\0')
+	{
+		substr[j] = s[start];
+		j++;
+		start++;
+	}
+	substr[j] = '\0';
+	return (substr);
 }

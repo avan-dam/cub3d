@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:53 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/05 17:57:40 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/12 00:44:05 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,25 @@
 
 int		ft_move_right(t_master *big)
 {
-	float	move_speed;
-
-	move_speed = 0.1;
 	if (big->move.move_right == 1)
 	{
 		if (big->ray.dir_x < 0.5 && big->ray.dir_x > -0.5)
 		{
 			if (big->mys.split[(int)(big->ray.pos_y)]
-			[(int)(big->ray.pos_x - big->ray.dir_y * move_speed)] == '0')
+			[(int)(big->ray.pos_x - big->ray.dir_y * 0.1)] == '0')
 			{
-				big->ray.pos_x = big->ray.pos_x - big->ray.dir_y * move_speed;
+				big->move.counter++;
+				big->ray.pos_x = big->ray.pos_x - big->ray.dir_y * 0.1;
 				return (1);
 			}
 		}
 		else
 		{
 			if (big->mys.split[(int)(big->ray.pos_y + big->ray.dir_x *
-			move_speed)][(int)(big->ray.pos_x)] == '0')
+			0.1)][(int)(big->ray.pos_x)] == '0')
 			{
-				big->ray.pos_y = big->ray.pos_y + big->ray.dir_x * move_speed;
+				big->move.counter++;
+				big->ray.pos_y = big->ray.pos_y + big->ray.dir_x * 0.1;
 				return (1);
 			}
 		}
@@ -44,26 +43,25 @@ int		ft_move_right(t_master *big)
 
 int		ft_move_left(t_master *big)
 {
-	float move_speed;
-
-	move_speed = 0.1;
 	if (big->move.move_left == 1)
 	{
 		if (big->ray.dir_x < 0.5 && big->ray.dir_x > -0.5)
 		{
 			if (big->mys.split[(int)(big->ray.pos_y)]
-			[(int)(big->ray.pos_x + big->ray.dir_y * move_speed)] == '0')
+			[(int)(big->ray.pos_x + big->ray.dir_y * 0.1)] == '0')
 			{
-				big->ray.pos_x = big->ray.pos_x + big->ray.dir_y * move_speed;
+				big->move.counter++;
+				big->ray.pos_x = big->ray.pos_x + big->ray.dir_y * 0.1;
 				return (1);
 			}
 		}
 		else
 		{
 			if (big->mys.split[(int)(big->ray.pos_y - big->ray.dir_x *
-			move_speed)][(int)(big->ray.pos_x)] == '0')
+			0.1)][(int)(big->ray.pos_x)] == '0')
 			{
-				big->ray.pos_y = big->ray.pos_y - big->ray.dir_x * move_speed;
+				big->move.counter++;
+				big->ray.pos_y = big->ray.pos_y - big->ray.dir_x * 0.1;
 				return (1);
 			}
 		}

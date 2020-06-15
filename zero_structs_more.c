@@ -6,11 +6,20 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:11 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/05 17:52:33 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/11 16:15:22 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	ft_zero_all(t_master *big)
+{
+	ft_zero_struct(&big->mys);
+	ft_zero_sprite_struct(&big->sprite, 1);
+	ft_zero_t_move(&big->move);
+	ft_zero_tray(&big->ray);
+	ft_zero_tdata(&big->img);
+}
 
 void	ft_zero_tdata_more_more(t_data *img)
 {

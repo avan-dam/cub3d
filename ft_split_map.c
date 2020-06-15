@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:36 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 16:36:21 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/10 18:12:26 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,5 @@ int			ft_split_cub3d(char const *s, char c, t_sto *mys)
 	if (find_first_last(s, c, mys) == 0)
 		return (-1);
 	mys->split[words] = NULL;
-	mys->map = NULL;
-	free(mys->map);
 	return (1);
 }

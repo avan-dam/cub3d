@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 17:16:47 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 17:53:27 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/12 20:23:41 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 # include <math.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <stdio.h>
+# include <stdlib.h>
 
 typedef struct		s_sto
 {
-	int				r[3];
+	long int 		r[3];
 	char			*no;
 	char			*so;
 	char			*we;
@@ -29,6 +31,7 @@ typedef struct		s_sto
 	int				row;
 	char			*map;
 	char			**split;
+	char			**copy;
 	int				tilesize;
 	unsigned int	floorcolor;
 	unsigned int	ceilingcolor;
@@ -54,6 +57,9 @@ typedef struct		s_sprite
 	int				draw_start_x;
 	int				draw_end_x;
 	int				stripe;
+	int				*order;
+	void			*img;
+	char			*addr;
 }					t_sprite;
 
 typedef struct		s_data {
@@ -74,8 +80,9 @@ typedef struct		s_data {
 	int				line_length4;
 	int				line_length5;
 	int				endian;
+	int				endian2;
 	int				color;
-	int				color_sprite;
+	unsigned int	color_sprite;
 	void			*texture1;
 	char			*addrtexture1;
 	void			*texture2;
@@ -143,6 +150,7 @@ typedef struct		s_move
 	int				rotate_right;
 	int				move_left;
 	int				move_right;
+	int				counter;
 }					t_move;
 
 typedef struct		s_master
@@ -174,18 +182,21 @@ int					fill_texture(char *line, t_sto *mys);
 int					ft_texture_correct(char *line, t_sto *mys, char *texture);
 int					fill_res(char *line, t_sto *mys, int i, int j);
 int					ft_find_map(char *line, t_sto *mys);
+int					check_map_characters(char *map, t_sto *mys);
 char				*ft_strjoin_cub3d(char const *s1, char const *s2);
 int					ft_split_cub3d(char const *s, char c, t_sto *mys);
 char				*ft_strdup(const char *s1);
 int					ft_strlen(const char *s);
 int					ft_check_if_map_valid(t_sto *mys);
+int					ft_free_copy(t_sto *mys, int i);
 int					ft_check_lines(t_sto *mys, int x, int y);
 int					ft_more_map_valid(char **split, int x, int y);
-int					ft_find_first_zero(t_sto *mys);
+int					start_char(t_sto *mys, int i, int x, int y);
 void				ft_floodfill(t_sto *mys, int x, int y);
 int					start_raycastin(t_sto *mys);
+void				check_resize(t_master *big);
 void				ft_sort_big_struct(t_master *big, t_sto *mys);
-void				ft_load_texture(t_master *big);
+int					ft_load_texture(t_master *big);
 int					keywhere(t_master *big);
 int					keyrelease(int keycode, t_master *big);
 int					keypress(int keycode, t_master *big);
@@ -221,14 +232,16 @@ unsigned int		create_trgb(int t, int r, int g, int b);
 void				find_ceiling_floor_hx(t_sto *mys);
 void				ft_store_sprite(t_master *big);
 void				ft_numb_sprites(t_master *big);
-void				ft_sprite_put(t_master *big);
-void				ft_load_sprite(t_master *big);
-void				ft_swap(int *x, int *y);
-void				sort_sprites(int *sprite_ord, float *sprite_dist, int numb);
+int					ft_sprite_put(t_master *big, int i);
+int					ft_load_sprite(t_master *big);
+int					sort_sprites(float *sprite_dist, int numb, t_master *big);
 void				ft_find_me_sprite_color(t_master *big, int tex_x, int y);
 void				ver_dot_sprite(int x, int y, t_master *big);
 void				sprite_working(t_master *big);
 void				ft_zero_sprite_struct(t_sprite *sprite, int i);
 void				start_value_sprite(t_master *big);
+void				ft_zero_all(t_master *big);
+char				*ft_substr(char *s, int start, int len);
+int					ft_save(t_master *big);
 
 #endif

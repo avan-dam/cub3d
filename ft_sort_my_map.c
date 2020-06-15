@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:27 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 17:00:06 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/12 00:28:32 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char		*ft_strjoin_cub3d(char const *s1, char const *s2)
 	return (str);
 }
 
-int			check_map_characters(char *map)
+int			check_map_characters(char *map, t_sto *mys)
 {
 	int	i;
 
@@ -82,7 +82,10 @@ int			check_map_characters(char *map)
 		(map[i] != '2') && (map[i] != 'N') &&
 		(map[i] != 'E') && (map[i] != 'S') && (map[i] != 'W') &&
 		(map[i] != ' ') && (map[i] != '\n'))
+		{
+			mys->error = "Unknown character in map";
 			return (-1);
+		}
 		i++;
 	}
 	return (1);
@@ -90,11 +93,15 @@ int			check_map_characters(char *map)
 
 int			ft_find_map(char *line, t_sto *mys)
 {
+	char *temp;
+
 	if (mys->map == NULL)
 	{
 		mys->map = ft_strdup(line);
 		return (1);
 	}
-	mys->map = ft_strjoin_cub3d(mys->map, line);
-	return (check_map_characters(mys->map));
+	temp = mys->map;
+	mys->map = ft_strjoin_cub3d(temp, line);
+	free(temp);
+	return (check_map_characters(mys->map, mys));
 }

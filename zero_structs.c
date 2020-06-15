@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:57:43 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 13:24:44 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/12 11:11:26 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	ft_zero_t_move(t_move *move)
 	move->rotate_right = 0;
 	move->move_right = 0;
 	move->move_left = 0;
+	move->counter = 0;
 }
 
 void	ft_more_zero(t_sto *mys)
@@ -54,9 +55,10 @@ void	ft_more_zero(t_sto *mys)
 	mys->we = 0;
 	mys->ea = 0;
 	mys->s = 0;
-	mys->row = 0;
 	mys->map = NULL;
 	mys->split = NULL;
+	mys->copy = NULL;
+	mys->row = 0;
 	mys->tilesize = 0;
 	mys->save = 0;
 	mys->error = NULL;
@@ -66,9 +68,12 @@ void	ft_zero_sprite_struct(t_sprite *sprite, int i)
 {
 	if (i == 1)
 	{
-		sprite->sprites = 0;
-		sprite->numbsprite = 0;
 		sprite->z_buf = NULL;
+		sprite->height = 0;
+		sprite->stripe = 0;
+		sprite->order = 0;
+		sprite->sprites = NULL;
+		sprite->numbsprite = 0;
 	}
 	sprite->x = 0;
 	sprite->y = 0;
@@ -76,13 +81,13 @@ void	ft_zero_sprite_struct(t_sprite *sprite, int i)
 	sprite->trans_x = 0;
 	sprite->trans_y = 0;
 	sprite->screen_x = 0;
-	sprite->height = 0;
 	sprite->draw_start_y = 0;
 	sprite->draw_end_y = 0;
 	sprite->width = 0;
 	sprite->draw_start_x = 0;
 	sprite->draw_end_x = 0;
-	sprite->stripe = 0;
+	sprite->addr = NULL;
+	sprite->img = NULL;
 }
 
 void	ft_zero_struct(t_sto *mys)

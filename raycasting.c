@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:46 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 13:23:53 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/12 01:00:34 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,14 @@ int		ft_looping(t_master *big)
 		ft_wall_height(big, x);
 		x++;
 	}
-	ft_sprite_put(big);
-	mlx_put_image_to_window(big->img.mlx, big->img.mlx_win, big->img.img, 0, 0);
+	if (ft_sprite_put(big, 0) == -1)
+		return (-1);
+	if (big->move.counter % 2 == 0)
+		mlx_put_image_to_window(big->img.mlx, big->img.mlx_win,
+		big->img.img, 0, 0);
+	else
+		mlx_put_image_to_window(big->img.mlx, big->img.mlx_win,
+		big->sprite.img, 0, 0);
 	return (1);
 }
 
@@ -131,22 +137,24 @@ int		start_raycastin(t_sto *mys)
 	t_master	big;
 
 	ft_sort_big_struct(&big, mys);
-	if ((big.mys.save == 0) && (big.mys.r[0] >= 1440))
-		big.mys.r[0] = 1439;
-	if ((big.mys.save == 0) && (big.mys.r[1] >= 900))
-		big.mys.r[1] = 899;
+	big.img.mlx = mlx_init();
+	check_resize(&big);
+	if (ft_save(&big) == 1)
+		return (1);
 	if (start_pos(&big, 0, 0) == -1)
 		return (-1);
-	big.img.mlx = mlx_init();
 	big.img.mlx_win = mlx_new_window(big.img.mlx, big.mys.r[0],
 	big.mys.r[1], "MLX");
-	ft_load_texture(&big);
-	ft_load_sprite(&big);
+	if (ft_load_texture(&big) == -1)
+		return (error_text(&big.mys, "error in texture", 0));
+	if (ft_load_sprite(&big) == -1)
+		return (-1);
 	ft_looping(&big);
 	mlx_hook(big.img.mlx_win, 02, 1L << 0, keypress, &big);
 	mlx_hook(big.img.mlx_win, 03, 1L << 1, keyrelease, &big);
 	mlx_hook(big.img.mlx_win, 17, 0L, exit_program, &big);
 	mlx_loop_hook(big.img.mlx, keywhere, &big);
 	mlx_loop(big.img.mlx);
+	ft_zero_sprite_struct(&big.sprite, 2);
 	return (1);
 }

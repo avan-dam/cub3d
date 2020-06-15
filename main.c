@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:45 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/08 18:09:40 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/12 10:54:04 by Amber         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ int		check_negatives(t_sto *mys)
 		return (error_text(mys, "Error in floor colour", 0));
 	if ((mys->c[0] > 255) || (mys->c[1] > 255) || (mys->c[2] > 255))
 		return (error_text(mys, "Error in ceiling colour", 0));
+	if ((open(mys->no, O_RDONLY) == -1) || (open(mys->so, O_RDONLY) == -1)
+	|| (open(mys->we, O_RDONLY) == -1) || (open(mys->ea, O_RDONLY) == -1))
+		return (error_text(mys, "error opening texture", 0));
+	if (open(mys->s, O_RDONLY) == -1)
+		return (error_text(mys, "error in loading sprite", 0));
 	return (1);
 }
 
@@ -77,7 +82,8 @@ int		ft_next_steps(t_sto *mys)
 	find_ceiling_floor_hx(mys);
 	if (start_raycastin(mys) == -1)
 	{
-		mys->error = "error in raycasting";
+		if (mys->error == NULL)
+			mys->error = "error in raycasting";
 		return (-1);
 	}
 	return (0);
@@ -90,14 +96,11 @@ int		ft_find_info(t_sto *mys, int fd)
 
 	liney = get_next_line(fd, &line);
 	if (liney == -1)
-	{
-		mys->error = "Failed to get next line";
-		return (-1);
-	}
+		return (error_text(mys, "Error getting new line", 1));
 	while (liney != 0)
 	{
 		if (liney == -1)
-			return (free_storage(&line, mys));
+			return (error_text(mys, "Error getting new line", 1));
 		if (check_liney(line, mys) == -1)
 			return (free_storage(&line, mys));
 		free(line);
@@ -105,7 +108,7 @@ int		ft_find_info(t_sto *mys, int fd)
 		if ((ft_strcmp(line, "") != 0) && (liney == 0))
 		{
 			if (check_liney(line, mys) == -1)
-				return (free_storage(&line, mys));
+				return (error_text(mys, "Error getting new line", 1));
 			free(line);
 		}
 	}
@@ -120,7 +123,6 @@ int		main(int argc, char **argv)
 
 	i = 0;
 	ft_zero_struct(&mys);
-	// check this!! 
 	if ((argc == 3) && (ft_strcmp(argv[2], "--save") == 0))
 		mys.save = 1;
 	if ((argc != 2) && (mys.save != 1))
@@ -128,14 +130,15 @@ int		main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 	{
-		mys.error = "open failed";
+		mys.error = ft_strdup("open failed");
 		return (ft_error(&mys));
 	}
 	if ((ft_find_info(&mys, fd)) == -1)
 		return (ft_error(&mys));
 	if (close(fd) == -1)
 	{
-		mys.error = "close failed";
+		mys.error = ft_strdup("open failed");
 		return (ft_error(&mys));
 	}
+	return (1);
 }
