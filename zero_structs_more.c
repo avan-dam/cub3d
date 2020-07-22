@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:11 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/11 16:15:22 by avan-dam      ########   odam.nl         */
+/*   Updated: 2020/06/22 19:07:54 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_zero_all(t_master *big)
 {
 	ft_zero_struct(&big->mys);
-	ft_zero_sprite_struct(&big->sprite, 1);
+	ft_zero_sprite_struct(&big->sp, 1);
 	ft_zero_t_move(&big->move);
 	ft_zero_tray(&big->ray);
 	ft_zero_tdata(&big->img);

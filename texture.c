@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:22 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 00:26:56 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/22 19:08:11 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	ver_dot(int x, int y, t_master *big)
 	}
 	else
 	{
-		dst = big->sprite.addr + (y * big->img.line_length + x *
+		dst = big->sp.addr + (y * big->img.line_length + x *
 		(big->img.bits_per_pixel / 8));
 	}
 	*(unsigned int*)dst = big->img.color;

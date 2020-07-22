@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:57:43 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 11:11:26 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/22 19:05:42 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,30 +64,31 @@ void	ft_more_zero(t_sto *mys)
 	mys->error = NULL;
 }
 
-void	ft_zero_sprite_struct(t_sprite *sprite, int i)
+void	ft_zero_sprite_struct(t_sprite *sp, int i)
 {
 	if (i == 1)
 	{
-		sprite->z_buf = NULL;
-		sprite->height = 0;
-		sprite->stripe = 0;
-		sprite->order = 0;
-		sprite->sprites = NULL;
-		sprite->numbsprite = 0;
+		sp->z_buf = NULL;
+		sp->height = 0;
+		sp->stripe = 0;
+		sp->order = 0;
+		sp->sprites = NULL;
+		sp->numbsprite = 0;
 	}
-	sprite->x = 0;
-	sprite->y = 0;
-	sprite->inv_det = 0;
-	sprite->trans_x = 0;
-	sprite->trans_y = 0;
-	sprite->screen_x = 0;
-	sprite->draw_start_y = 0;
-	sprite->draw_end_y = 0;
-	sprite->width = 0;
-	sprite->draw_start_x = 0;
-	sprite->draw_end_x = 0;
-	sprite->addr = NULL;
-	sprite->img = NULL;
+	sp->x = 0;
+	sp->y = 0;
+	sp->inv_det = 0;
+	sp->trans_x = 0;
+	sp->trans_y = 0;
+	sp->screen_x = 0;
+	sp->draw_start_y = 0;
+	sp->draw_end_y = 0;
+	sp->width = 0;
+	sp->draw_start_x = 0;
+	sp->draw_end_x = 0;
+	sp->addr = NULL;
+	sp->img = NULL;
+	sp->v = 0;
 }
 
 void	ft_zero_struct(t_sto *mys)

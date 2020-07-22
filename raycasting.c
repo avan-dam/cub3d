@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:46 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/15 19:38:45 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/22 19:07:13 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	ft_wall_height(t_master *big, int x)
 	draw_end = big->img.line_height / 2 + big->mys.r[1] / 2;
 	if (draw_end >= big->mys.r[1])
 		draw_end = big->mys.r[1] - 1;
-	big->sprite.z_buf[x] = big->ray.perpwalldist;
+	big->sp.z_buf[x] = big->ray.perpwalldist;
 	ft_texturing(big, draw_start, draw_end, x);
 	ft_draw_ceiling(big, draw_start, x, dst);
 	ft_draw_floor(big, draw_end, x, dst);
@@ -112,7 +112,7 @@ int		ft_looping(t_master *big)
 	float	temp[big->mys.r[0]];
 
 	x = 0;
-	big->sprite.z_buf = temp;
+	big->sp.z_buf = temp;
 	while (x < big->ray.w)
 	{
 		ft_find_variables(big, x);
@@ -123,12 +123,14 @@ int		ft_looping(t_master *big)
 	}
 	if (ft_sprite_put(big, 0) == -1)
 		return (-1);
+	if (big->mys.save != 0)
+		return (ft_start_save(big));
 	if (big->move.counter % 2 == 0)
 		mlx_put_image_to_window(big->img.mlx, big->img.mlx_win,
 		big->img.img, 0, 0);
 	else
 		mlx_put_image_to_window(big->img.mlx, big->img.mlx_win,
-		big->sprite.img, 0, 0);
+		big->sp.img, 0, 0);
 	return (1);
 }
 
@@ -138,23 +140,23 @@ int		start_raycastin(t_sto *mys)
 
 	ft_sort_big_struct(&big, mys);
 	big.img.mlx = mlx_init();
-	if (big.mys.save != 0)
-		return(ft_start_save(&big));
 	check_resize(&big);
+	if (big.mys.save == 0)
+		big.img.mlx_win = mlx_new_window(big.img.mlx, big.mys.r[0],
+		big.mys.r[1], "MLX");
 	if (start_pos(&big, 0, 0) == -1)
 		return (-1);
-	big.img.mlx_win = mlx_new_window(big.img.mlx, big.mys.r[0],
-	big.mys.r[1], "MLX");
 	if (ft_load_texture(&big) == -1)
 		return (error_text(&big.mys, "error in texture", 0));
 	if (ft_load_sprite(&big) == -1)
 		return (-1);
-	ft_looping(&big);
+	if (ft_looping(&big) == 2)
+		return (1);
 	mlx_hook(big.img.mlx_win, 02, 1L << 0, keypress, &big);
 	mlx_hook(big.img.mlx_win, 03, 1L << 1, keyrelease, &big);
 	mlx_hook(big.img.mlx_win, 17, 0L, exit_program, &big);
 	mlx_loop_hook(big.img.mlx, keywhere, &big);
 	mlx_loop(big.img.mlx);
-	ft_zero_sprite_struct(&big.sprite, 2);
+	ft_zero_sprite_struct(&big.sp, 2);
 	return (1);
 }

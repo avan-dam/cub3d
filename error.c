@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/08 17:01:47 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 01:02:17 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/17 15:44:53 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int		ft_error(t_sto *mys)
 int		free_storage(char **storage, t_sto *mys)
 {
 	if (mys->error == NULL)
-		mys->error = "Failed to get next line";
+		mys->error = "problem with map";
 	if (*storage)
 	{
 		free(*storage);

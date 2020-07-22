@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 17:16:47 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/15 19:44:03 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/22 19:06:11 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,11 @@
 # include <math.h>
 # include <stdlib.h>
 # include <fcntl.h>
-# include <stdio.h>
 # include <unistd.h>
 
 typedef struct		s_sto
 {
-	long int 		r[3];
+	long int		r[3];
 	char			*no;
 	char			*so;
 	char			*we;
@@ -60,6 +59,8 @@ typedef struct		s_sprite
 	int				*order;
 	void			*img;
 	char			*addr;
+	unsigned int	colour_save;
+	float			v;
 }					t_sprite;
 
 typedef struct		s_data {
@@ -159,7 +160,7 @@ typedef struct		s_master
 	t_data			img;
 	t_sto			mys;
 	t_move			move;
-	t_sprite		sprite;
+	t_sprite		sp;
 }					t_master;
 
 int					main(int argc, char **argv);
@@ -173,6 +174,7 @@ int					error_text(t_sto *mys, char *error, int i);
 int					ft_error(t_sto *mys);
 int					ft_next_steps(t_sto *mys);
 int					check_liney(char *line, t_sto *mys);
+int					ft_more_checks(char *line, t_sto *mys);
 int					check_negatives(t_sto *mys);
 int					ft_strcmp(const char *s1, const char *s2);
 int					floor_ceiling_colour(char *line, t_sto *mys, char c, int j);
@@ -188,10 +190,11 @@ int					ft_split_cub3d(char const *s, char c, t_sto *mys);
 char				*ft_strdup(const char *s1);
 int					ft_strlen(const char *s);
 int					ft_check_if_map_valid(t_sto *mys);
+int					ft_duplicate_map(t_sto *mys);
 int					ft_free_copy(t_sto *mys, int i);
 int					ft_check_lines(t_sto *mys, int x, int y);
 int					ft_more_map_valid(char **split, int x, int y);
-int					start_char(t_sto *mys, int i, int x, int y);
+int					start_char(t_sto *mys, int x, int y, int p);
 void				ft_floodfill(t_sto *mys, int x, int y);
 int					start_raycastin(t_sto *mys);
 void				check_resize(t_master *big);
@@ -242,11 +245,10 @@ void				ft_zero_sprite_struct(t_sprite *sprite, int i);
 void				start_value_sprite(t_master *big);
 void				ft_zero_all(t_master *big);
 char				*ft_substr(char *s, int start, int len);
-int				    ft_start_save(t_master *big);
-void  			    ft_bitheader(t_master *big);
-void				ft_padding(int fd, int len);
-int					ft_len_hx(long int i);
-void				ft_puthx(long int i, int fd);
-char				*ft_bzero_cub3d(int n);
+int					ft_start_save(t_master *big);
+void				ft_bitheader(t_master *big);
+void				ft_bitheader(t_master *big);
+void				ft_putpixeldata(t_master *big);
+void				ft_find_me_color_save(t_master *big, int y, int x);
 
 #endif

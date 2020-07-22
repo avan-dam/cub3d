@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:53 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 00:27:17 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/20 16:22:50 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,9 @@ int		ft_moveup(t_master *big)
 	move_speed = 0.1;
 	if (big->move.up == 1)
 	{
-		if (big->mys.split[(int)(big->ray.pos_y + big->ray.dir_y * move_speed)]
-		[(int)(big->ray.pos_x + big->ray.dir_x * move_speed)] == '0')
+		if (big->mys.split[(int)(big->ray.pos_y + (big->ray.dir_y * 5)
+		* move_speed)][(int)(big->ray.pos_x + (big->ray.dir_x * 5)
+		* move_speed)] == '0')
 		{
 			big->move.counter++;
 			big->ray.pos_x = big->ray.pos_x + big->ray.dir_x * move_speed;
@@ -93,8 +94,9 @@ int		ft_movedown(t_master *big)
 	move_speed = 0.1;
 	if (big->move.down == 1)
 	{
-		if (big->mys.split[(int)(big->ray.pos_y - (big->ray.dir_y * move_speed))
-		][(int)(big->ray.pos_x - (big->ray.dir_x * move_speed))] == '0')
+		if (big->mys.split[(int)(big->ray.pos_y - (big->ray.dir_y * 5)
+		* move_speed)][(int)(big->ray.pos_x - (big->ray.dir_x * 5)
+		* move_speed)] == '0')
 		{
 			big->move.counter++;
 			big->ray.pos_x = big->ray.pos_x - big->ray.dir_x * move_speed;

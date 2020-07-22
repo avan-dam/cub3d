@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:59:04 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 01:14:05 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/22 19:04:45 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ int		sort_sprites(float *sprite_dist, int numb, t_master *big)
 	{
 		while (j < numb - i - 1)
 		{
-			if (sprite_dist[big->sprite.order[j]] <
-			sprite_dist[big->sprite.order[j + 1]])
+			if (sprite_dist[big->sp.order[j]] <
+			sprite_dist[big->sp.order[j + 1]])
 			{
-				temp = big->sprite.order[j];
-				big->sprite.order[j] = big->sprite.order[j + 1];
-				big->sprite.order[j + 1] = temp;
+				temp = big->sp.order[j];
+				big->sp.order[j] = big->sp.order[j + 1];
+				big->sp.order[j + 1] = temp;
 				j = -1;
 				i = 0;
 			}
@@ -71,30 +71,31 @@ int		sort_sprites(float *sprite_dist, int numb, t_master *big)
 
 void	start_value_sprite(t_master *big)
 {
-	big->sprite.inv_det = 1.0 / (big->ray.plane_x * big->ray.dir_y -
+	big->sp.inv_det = 1.0 / (big->ray.plane_x * big->ray.dir_y -
 	big->ray.dir_x * big->ray.plane_y);
-	big->sprite.trans_x = big->sprite.inv_det * (big->ray.dir_y *
-	big->sprite.x - big->ray.dir_x * big->sprite.y);
-	big->sprite.trans_y = big->sprite.inv_det * (-big->ray.plane_y *
-	big->sprite.x + big->ray.plane_x * big->sprite.y);
-	big->sprite.screen_x = (int)((big->mys.r[0] / 2) *
-	(1 + big->sprite.trans_x / big->sprite.trans_y));
-	big->sprite.height = abs((int)(big->mys.r[1] / (big->sprite.trans_y)));
-	big->sprite.draw_start_y = -big->sprite.height / 2 + big->mys.r[1] / 2;
-	if (big->sprite.draw_start_y < 0)
-		big->sprite.draw_start_y = 0;
-	big->sprite.draw_end_y = (big->sprite.height / 2 + big->mys.r[1] / 2);
-	if (big->sprite.draw_end_y >= big->mys.r[1])
-		big->sprite.draw_end_y = big->mys.r[1] - 1;
-	big->sprite.width = abs((int)(big->mys.r[1] / (big->sprite.trans_y)));
-	big->sprite.draw_start_x = -big->sprite.width / 2 +
-	big->sprite.screen_x;
-	if (big->sprite.draw_start_x < 0)
-		big->sprite.draw_start_x = 0;
-	big->sprite.draw_end_x = (int)(big->sprite.width / 2 +
-	big->sprite.screen_x);
-	if (big->sprite.draw_end_x >= big->mys.r[0])
-		big->sprite.draw_end_x = big->mys.r[0] - 1;
+	big->sp.trans_x = big->sp.inv_det * (big->ray.dir_y *
+	big->sp.x - big->ray.dir_x * big->sp.y);
+	big->sp.trans_y = big->sp.inv_det * (-big->ray.plane_y *
+	big->sp.x + big->ray.plane_x * big->sp.y);
+	big->sp.v = (int)(250 / big->sp.trans_y);
+	big->sp.screen_x = (int)((big->mys.r[0] / 2) *
+	(1.0 + big->sp.trans_x / big->sp.trans_y));
+	big->sp.height = fabs((int)(big->mys.r[1] / (big->sp.trans_y)) * 0.825);
+	big->sp.draw_start_y = -big->sp.height / 2 + big->mys.r[1] / 2 + big->sp.v;
+	if (big->sp.draw_start_y < 0)
+		big->sp.draw_start_y = 0;
+	big->sp.draw_end_y = big->sp.height / 2 + big->mys.r[1] / 2 + big->sp.v;
+	if (big->sp.draw_end_y >= big->mys.r[1])
+		big->sp.draw_end_y = big->mys.r[1] - 1;
+	big->sp.width = fabs((int)(big->mys.r[1] / (big->sp.trans_y)) * 0.825);
+	big->sp.draw_start_x = (int)(-big->sp.width / 2 +
+	big->sp.screen_x);
+	if (big->sp.draw_start_x < 0)
+		big->sp.draw_start_x = 0;
+	big->sp.draw_end_x = (int)(big->sp.width / 2 +
+	big->sp.screen_x);
+	if (big->sp.draw_end_x >= big->mys.r[0])
+		big->sp.draw_end_x = big->mys.r[0] - 1;
 }
 
 /*
@@ -109,49 +110,49 @@ void	sprite_working(t_master *big)
 	int		tex_x;
 	int		y;
 
-	big->sprite.stripe = big->sprite.draw_start_x;
-	while (big->sprite.stripe < big->sprite.draw_end_x)
+	big->sp.stripe = big->sp.draw_start_x;
+	while (big->sp.stripe < big->sp.draw_end_x)
 	{
-		tex_x = (int)((256 * (big->sprite.stripe - (-big->sprite.width / 2 +
-		big->sprite.screen_x)) * big->img.img_width5 / big->sprite.width)
+		tex_x = (int)((256 * (big->sp.stripe - (-big->sp.width / 2 +
+		big->sp.screen_x)) * big->img.img_width5 / big->sp.width)
 		/ 256);
-		if (big->sprite.trans_y > 0 && big->sprite.stripe > 0
-		&& big->sprite.stripe < big->mys.r[0] && big->sprite.trans_y
-		< big->sprite.z_buf[big->sprite.stripe])
+		if (big->sp.trans_y > 0 && big->sp.stripe > 0
+		&& big->sp.stripe < big->mys.r[0] && big->sp.trans_y
+		< big->sp.z_buf[big->sp.stripe])
 		{
-			y = (int)big->sprite.draw_start_y;
-			while (y < big->sprite.draw_end_y)
+			y = (int)big->sp.draw_start_y;
+			while (y < big->sp.draw_end_y)
 			{
 				ft_find_me_sprite_color(big, tex_x, y);
-				ver_dot_sprite(big->sprite.stripe, y, big);
+				ver_dot_sprite(big->sp.stripe, y, big);
 				y++;
 			}
 		}
-		big->sprite.stripe++;
+		big->sp.stripe++;
 	}
 }
 
 int		ft_sprite_put(t_master *big, int i)
 {
-	int			order[big->sprite.numbsprite];
-	float		sprite_dist[big->sprite.numbsprite];
+	int			order[big->sp.numbsprite];
+	float		sprite_dist[big->sp.numbsprite];
 
-	big->sprite.order = order;
-	while (i < big->sprite.numbsprite)
+	big->sp.order = order;
+	while (i < big->sp.numbsprite)
 	{
-		big->sprite.order[i] = i;
-		sprite_dist[i] = ((big->ray.pos_x - big->sprite.sprites[i][1]) *
-		(big->ray.pos_x - big->sprite.sprites[i][1]) + (big->ray.pos_y -
-		big->sprite.sprites[i][0]) * (big->ray.pos_y -
-		big->sprite.sprites[i][0]));
+		big->sp.order[i] = i;
+		sprite_dist[i] = ((big->ray.pos_x - big->sp.sprites[i][1]) *
+		(big->ray.pos_x - big->sp.sprites[i][1]) + (big->ray.pos_y -
+		big->sp.sprites[i][0]) * (big->ray.pos_y -
+		big->sp.sprites[i][0]));
 		i++;
 	}
-	i = sort_sprites(sprite_dist, big->sprite.numbsprite, big);
-	while (i < big->sprite.numbsprite)
+	i = sort_sprites(sprite_dist, big->sp.numbsprite, big);
+	while (i < big->sp.numbsprite)
 	{
-		big->sprite.x = big->sprite.sprites[big->sprite.order[i]][1]
+		big->sp.x = big->sp.sprites[big->sp.order[i]][1]
 		- big->ray.pos_x + 0.5;
-		big->sprite.y = big->sprite.sprites[big->sprite.order[i]][0]
+		big->sp.y = big->sp.sprites[big->sp.order[i]][0]
 		- big->ray.pos_y + 0.5;
 		start_value_sprite(big);
 		sprite_working(big);

@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:59 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/11 01:40:01 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/22 19:01:41 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	ft_fill_ray(t_master *big, int x, int y)
 int		start_pos(t_master *big, int y, int x)
 {
 	ft_numb_sprites(big);
-	big->img.color = 0x00FFFF;
 	big->ray.w = big->mys.r[0];
 	while (big->mys.split[y] != '\0')
 	{

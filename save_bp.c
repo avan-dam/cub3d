@@ -6,124 +6,101 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:41 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/15 19:39:12 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/22 19:08:50 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "mlx.h"
 
-char	*ft_bzero_cub3d(int n)
+void	ft_find_me_color_save(t_master *big, int y, int x)
 {
-	char	*ptr;
-	int		i;
+	char	*dst;
 
-	i = 0;
-	ptr = malloc(n);
-	if (ptr == NULL)
-		return (NULL);
-	while (i < n)
+	dst = big->img.addr + (x * big->img.line_length + y *
+	(big->img.bits_per_pixel / 8));
+	big->sp.colour_save = *(unsigned int *)dst;
+}
+
+void	ft_putpixeldata(t_master *big)
+{
+	long int	x;
+	long int	y;
+
+	x = 0;
+	y = big->mys.r[1] - 1;
+	while (y >= 0)
 	{
-		ptr[i] = 0;
+		while (x < big->mys.r[0])
+		{
+			ft_find_me_color_save(big, x, y);
+			write(big->mys.save, &big->sp.colour_save, 3);
+			write(big->mys.save, "0x00", 1);
+			x++;
+		}
+		x = 0;
+		y--;
+	}
+}
+
+void	ft_infohader(t_master *big)
+{
+	unsigned char	buffer[40];
+	int				i;
+	int				width;
+	int				height;
+
+	width = big->mys.r[0];
+	height = big->mys.r[1];
+	i = 0;
+	while (i < 40)
+	{
+		buffer[i] = (unsigned char)(0);
 		i++;
 	}
-	return (ptr);
+	buffer[0] = (unsigned char)(40);
+	buffer[4] = (unsigned char)(width % 256);
+	buffer[5] = (unsigned char)(width / 256 % 256);
+	buffer[6] = (unsigned char)(width / 256 / 256 % 256);
+	buffer[7] = (unsigned char)(width / 256 / 256 / 256);
+	buffer[8] = (unsigned char)(height % 256);
+	buffer[9] = (unsigned char)(height / 256 % 256);
+	buffer[10] = (unsigned char)(height / 256 / 256 % 256);
+	buffer[11] = (unsigned char)(height / 256 / 256 / 256);
+	buffer[12] = (unsigned char)(1);
+	buffer[14] = (unsigned char)(32);
+	write(big->mys.save, buffer, 40);
 }
 
-void	ft_puthx(long int i, int fd)
+void	ft_bitheader(t_master *big)
 {
-	char		z;
-	long int	c;
-
-	c = i;
-	while (c >= 16)
-		c = c / 16;
-	if (i >= 16)
-	{
-		ft_puthx(i / 16, fd);
-		ft_puthx(i % 16, fd);
-	}
-	else
-	{
-		if (i <= 9)
-			z = i + '0';
-		else
-			z = (i - 10) + 'A';
-		write(fd, &z, 1);
-	}
-}
-
-int		ft_len_hx(long int i)
-{
-	long int	a;
-
-	a = 0;
-	if (i < 0)
-	{
-		i = i * -1;
-		i = 4294967296 - i;
-	}
-	while (i >= 16)
-	{
-		i = i / 16;
-		a++;
-	}
-	a++;
-	return (a);
-}
-
-void	ft_padding(int fd, int len)
-{
-	int i;
+	int				i;
+	unsigned char	buffer[14];
+	unsigned int	filesize;
 
 	i = 0;
-	while (i < 16 - 2 - len)
+	filesize = (big->mys.r[0] * big->mys.r[1] * 4 + 54);
+	while (i < 14)
 	{
-		write(fd, "0", 1);
+		buffer[i] = (unsigned char)(0);
 		i++;
 	}
+	buffer[0] = 'B';
+	buffer[1] = 'M';
+	buffer[2] = (unsigned char)(filesize % 256);
+	buffer[3] = (unsigned char)(filesize / 256 % 256);
+	buffer[4] = (unsigned char)(filesize / 256 / 256 % 256);
+	buffer[5] = (unsigned char)(filesize / 256 / 256 / 256);
+	buffer[10] = (unsigned char)(54);
+	write(big->mys.save, buffer, 14);
 }
 
-void     ft_bitheader(t_master *big)
-{    //24 bits-per-pixel bitmap (BGR)
-	int	width_len;
-	int	height_len;
-	long int imgsize;
-	int imgsize_len;
-	int i;
-
-	i = 0;
-	width_len = ft_len_hx(big->mys.r[0]);
-	height_len = ft_len_hx(big->mys.r[1]);
-	imgsize = big->mys.r[0] * big->mys.r[1];
-	imgsize_len = ft_len_hx(imgsize);
-    write(big->mys.save, "0x420x4D", 8);//file type
-	write(big->mys.save, "0x000x000x000x00", 16);//file size
-	write(big->mys.save, "0x000x000x000x00", 16);//reserved
-	write(big->mys.save, "0x000x000x000x00", 16);//reserved
-	write(big->mys.save, "0x360x000x000x00", 16);//54 pixeloffsetdata
-	write(big->mys.save, "0x280x000x000x00", 16);//40 headersize
-	write(big->mys.save, "0x", 2);//imagewidth
-	ft_puthx(big->mys.r[0], big->mys.save);
-	ft_padding(big->mys.save, width_len);
-	write(big->mys.save, "0x", 2);//imagewidth
-	ft_puthx(big->mys.r[1], big->mys.save);
-	ft_padding(big->mys.save, height_len);
-	write(big->mys.save, "0x010x00", 8);//Planes 1 color plane
-	write(big->mys.save, "0x180x00", 8);//24 bits per pixel
-	write(big->mys.save, "0x000x000x000x00", 16);//compression
-	write(big->mys.save, "0x", 2);//imagesize
-	ft_puthx(imgsize, big->mys.save);
-	ft_padding(big->mys.save, imgsize_len);
-	write(big->mys.save, "0x000x000x000x00", 16);//XpixelsPerMeter
-	write(big->mys.save, "0x000x000x000x00", 16);//YpixelsPerMeter
-	write(big->mys.save, "0x000x000x000x00", 16);//Totalcolors
-	write(big->mys.save, "0x000x000x000x00", 16);//importantColors
-}
-
-int     ft_start_save(t_master *big)
+int		ft_start_save(t_master *big)
 {
-    ft_bitheader(big);
-    // close(big->mys.save);
-    return (1);
+	big->mys.save = open("screenshot.bmp", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+	ft_bitheader(big);
+	ft_infohader(big);
+	ft_putpixeldata(big);
+	close(big->mys.save);
+	return (2);
 }

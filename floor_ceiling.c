@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 17:00:09 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/12 00:25:44 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/22 19:07:41 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void			ft_draw_ceiling(t_master *big, int y, int x, char *dst)
 		}
 		else
 		{
-			dst = big->sprite.addr + (i * big->img.line_length + x *
+			dst = big->sp.addr + (i * big->img.line_length + x *
 			(big->img.bits_per_pixel / 8));
 		}
 		*(unsigned int*)dst = big->mys.ceilingcolor;
@@ -57,7 +57,7 @@ void			ft_draw_floor(t_master *big, int y2, int x, char *dst)
 		}
 		else
 		{
-			dst = big->sprite.addr + (y2 * big->img.line_length + x *
+			dst = big->sp.addr + (y2 * big->img.line_length + x *
 			(big->img.bits_per_pixel / 8));
 		}
 		*(unsigned int*)dst = big->mys.floorcolor;

@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:45 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/15 19:38:04 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/23 12:19:55 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,20 @@ int		check_liney(char *line, t_sto *mys)
 	if (line[0] == 'S')
 		return (sprite_path(line, mys));
 	if (line[0] == 'F' || line[0] == 'C')
-	{
-		if (((line[0] == 'F' && mys->f[0] != -1)) ||
-		((line[0] == 'C' && mys->c[1] != -1)) || (mys->map != NULL)
-		|| (mys->split != NULL))
-			return (error_text(mys, "Error in order .cub file", 0));
-		if (floor_ceiling_colour(line, mys, line[0], 0) != 3)
-			return (-1);
-		return (1);
-	}
+		return (ft_more_checks(line, mys));
 	if (line[0] == ' ' || line[0] == '1' || line[0] == '2' || line[0] == '0')
 		return (ft_find_map(line, mys));
 	if ((ft_strcmp(line, "") == 0) && (mys->map == NULL))
 		return (1);
-	return (-1);
+	if ((ft_strcmp(line, "") == 0) && (mys->map != NULL))
+		return (error_text(mys, "error in spacing elements in .cub file", 0));
+	return (error_text(mys, "invalid element identifier", 0));
 }
 
 int		check_negatives(t_sto *mys)
 {
+	if ((mys->r[0] == 0) && (mys->f[0] == -1))
+		return (error_text(mys, "Not all elements given", 0));
 	if ((mys->r[0] <= 0) || (mys->r[1] <= 0))
 		return (error_text(mys, "Error in resolution", 0));
 	if ((mys->f[0] == -1) || (mys->f[1] == -1) || (mys->f[2] == -1))
@@ -62,21 +58,24 @@ int		check_negatives(t_sto *mys)
 		return (error_text(mys, "error opening texture", 0));
 	if (open(mys->s, O_RDONLY) == -1)
 		return (error_text(mys, "error in loading sprite", 0));
+	if (mys->map == NULL)
+		return (error_text(mys, "Map missing", 0));
 	return (1);
 }
 
 int		ft_next_steps(t_sto *mys)
 {
-	if ((ft_split_cub3d(mys->map, '\n', mys)) == -1)
-	{
-		mys->error = "Failed to split map";
-		return (-1);
-	}
 	if (check_negatives(mys) == -1)
 		return (-1);
+	if ((ft_split_cub3d(mys->map, '\n', mys)) == -1)
+	{
+		mys->error = "Problem with map";
+		return (-1);
+	}
 	if ((ft_check_if_map_valid(mys)) == -1)
 	{
-		mys->error = "map not valid";
+		if (mys->error == NULL)
+			mys->error = "map not valid";
 		return (-1);
 	}
 	find_ceiling_floor_hx(mys);
@@ -120,33 +119,24 @@ int		main(int argc, char **argv)
 	t_sto	mys;
 	int		i;
 	int		fd;
+	char	*end;
 
 	i = 0;
 	ft_zero_struct(&mys);
 	if ((argc == 3) && (ft_strcmp(argv[2], "--save") == 0))
-		mys.save = open("screenshot.bmp",  O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+		mys.save = 1;
 	if ((argc != 2) && (mys.save == 0))
 		return (error_text(&mys, "wrong number of arguments", 1));
+	end = ft_substr(argv[1], ft_strlen(argv[1]) - 4, 4);
+	if (ft_strcmp(".cub", end) != 0)
+		return (error_text(&mys, "not a .cub file", 1));
+	free(end);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-	{
-		mys.error = ft_strdup("open failed");
-		return (ft_error(&mys));
-	}
+		return (error_text(&mys, "open failed", 1));
 	if ((ft_find_info(&mys, fd)) == -1)
 		return (ft_error(&mys));
 	if (close(fd) == -1)
-	{
-		mys.error = ft_strdup("open failed");
-		return (ft_error(&mys));
-	}
-	// if (mys.save != 0)
-	// {
-	// 	if (close(mys.save) == -1)
-	// 	{
-	// 		mys.error = ft_strdup("open failed");
-	// 		return (ft_error(&mys));
-	// 	}
-	// }
+		return (error_text(&mys, "close failed", 1));
 	return (1);
 }

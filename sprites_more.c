@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:41 by Amber         #+#    #+#                 */
-/*   Updated: 2020/06/15 19:20:58 by Amber         ########   odam.nl         */
+/*   Updated: 2020/06/23 12:32:58 by avan-dam      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	ft_store_sprite(t_master *big)
 		{
 			if (big->mys.split[x][y] == '2')
 			{
-				big->sprite.sprites[j][0] = x;
-				big->sprite.sprites[j][1] = y;
+				big->sp.sprites[j][0] = x;
+				big->sp.sprites[j][1] = y;
 				j++;
 			}
 			y++;
@@ -51,18 +51,18 @@ void	ft_numb_sprites(t_master *big)
 		while (big->mys.split[x][y] != '\0')
 		{
 			if (big->mys.split[x][y] == '2')
-				big->sprite.numbsprite++;
+				big->sp.numbsprite++;
 			y++;
 		}
 		y = 0;
 		x++;
 	}
-	big->sprite.sprites = (int**)malloc(sizeof(int*) *
-	(big->sprite.numbsprite + 1));
+	big->sp.sprites = (int**)malloc(sizeof(int*) *
+	(big->sp.numbsprite + 1));
 	x = 0;
-	while (x < big->sprite.numbsprite)
+	while (x < big->sp.numbsprite)
 	{
-		big->sprite.sprites[x] = (int *)malloc(sizeof(int) * 2);
+		big->sp.sprites[x] = (int *)malloc(sizeof(int) * 2);
 		x++;
 	}
 	ft_store_sprite(big);
@@ -75,8 +75,8 @@ void	ft_find_me_sprite_color(t_master *big, int tex_x, int y)
 	int		tex_y;
 
 	dst = NULL;
-	d = (y) * 256 - big->mys.r[1] * 128 + big->sprite.height * 128;
-	tex_y = (int)(((d * big->img.img_height5) / big->sprite.height) / 256);
+	d = (y - big->sp.v) * 2 - big->mys.r[1] + big->sp.height;
+	tex_y = (int)(((d * big->img.img_height5) / big->sp.height) / 2);
 	dst = big->img.addrsprite + (tex_y * big->img.line_length5 + tex_x *
 	(big->img.bits_per_pixel5 / 8));
 	big->img.color_sprite = *(unsigned int *)dst;
@@ -87,9 +87,7 @@ void	ver_dot_sprite(int x, int y, t_master *big)
 	char	*dst;
 
 	dst = NULL;
-	// if ((big->img.color_sprite != 0x00FFFFFF) &&
-	// if ((big->img.color_sprite != 0x000000) &&
-	if (big->img.color_sprite != 0xFF000000)
+	if (big->img.color_sprite != 0x00000000)
 	{
 		if (big->move.counter % 2 == 0)
 		{
@@ -98,7 +96,7 @@ void	ver_dot_sprite(int x, int y, t_master *big)
 		}
 		else
 		{
-			dst = big->sprite.addr + (y * big->img.line_length + x *
+			dst = big->sp.addr + (y * big->img.line_length + x *
 			(big->img.bits_per_pixel / 8));
 		}
 		*(unsigned int*)dst = big->img.color_sprite;
