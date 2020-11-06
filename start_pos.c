@@ -67,7 +67,7 @@ int		start_pos(t_master *big, int y, int x)
 {
 	ft_numb_sprites(big);
 	big->ray.w = big->mys.r[0];
-	while (big->mys.split[y] != '\0')
+	while (big->mys.split[y])
 	{
 		while (big->mys.split[y][x] != '\0')
 		{
