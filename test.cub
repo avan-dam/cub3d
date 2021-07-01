@@ -2,9 +2,9 @@ S pics/barrel.png
 NO pics/wallpaper2.png
 SO pics/wallpaper1.png
 EA pics/wallpaper3.png
-C 0,0,200
+C 1,1,200
 WE pics/wallpaper4.png
-F 0,0,0
+F 1,1,1
 R 1000 1000
 
 11111111111111111111111111111

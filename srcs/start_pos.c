@@ -6,7 +6,7 @@
 /*   By: Amber <Amber@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/05 16:58:59 by Amber         #+#    #+#                 */
-/*   Updated: 2021/07/01 10:10:07 by ambervandam   ########   odam.nl         */
+/*   Updated: 2021/07/01 10:43:11 by ambervandam   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int		start_pos(t_master *big, int y, int x)
 {
 	ft_numb_sprites(big);
 	big->ray.w = big->mys.r[0];
-	while (big->mys.split[y][x] != '\0')
+	while (big->mys.split[y] != NULL)
 	{
 		while (big->mys.split[y][x] != '\0')
 		{
