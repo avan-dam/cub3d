@@ -23,7 +23,8 @@ Constraints are as follows:
   - Except for the map content, each type of element can be seperated by one or more empty line(s).
   - Except for the map, each type of information from an element can be seperated by one or more space(s).
   - The map must be parsed as it looks like in the file. Spaces are a valid part of the map, and is up to your to handle. You must be able to parse any kind of map, as long as it respects the maps rules.
-  - Each element (except the map) firsts information is the type identifier (composed by one or two character(s)). followed by all specific information for each object in a strict order such as:
+  - Each element (except the map) firsts information is the type identifier (composed by one or two character(s)). followed by all specific information for each object in a strict order **such as**:
+
    - Resolution:
       e.g. R 1920 1080
       identifier: R
@@ -58,6 +59,32 @@ Constraints are as follows:
       identifier: C
       R, G, B, colours in range [0.255]: 0, 255, 255
       
+      
+**Usage:**
+
+To run the program run the following commands in terminal
+
+![Screenshot 2021-07-01 at 10 48 05](https://user-images.githubusercontent.com/61982496/124098572-f0661380-da5c-11eb-8ae8-b8770296bc91.png)
+
+
+**Testing:**
+
+The test file I have provided can be seen below.
+
+![Screenshot 2021-07-01 at 10 49 28](https://user-images.githubusercontent.com/61982496/124098653-05db3d80-da5d-11eb-9693-963435a80fb2.png)
+
+
+To run the example test file I have provided run the follow command in terminal.
+
+![Screenshot 2021-07-01 at 10 47 37](https://user-images.githubusercontent.com/61982496/124098538-ea703280-da5c-11eb-97ea-7d0d2e31257e.png)
+
+The output will look like this.
+
+![Screenshot 2021-07-01 at 10 47 29](https://user-images.githubusercontent.com/61982496/124098497-e3492480-da5c-11eb-9fde-8b71cedcd107.png)
+
+Rotating in this map will give different results such as the following/
+
+![Screenshot 2021-07-01 at 10 48 20](https://user-images.githubusercontent.com/61982496/124098622-fc51d580-da5c-11eb-9abf-6e2fcf75f8cd.png)
       
       
       
