@@ -65,7 +65,11 @@ Constraints are as follows:
 
 To run the program run the following commands in terminal
 
-![Screenshot 2021-07-01 at 10 48 05](https://user-images.githubusercontent.com/61982496/124098572-f0661380-da5c-11eb-8ae8-b8770296bc91.png)
+```
+git clone https://github.com/avan-dam/cub3d.git
+cd cub3d
+make
+```
 
 
 **Testing:**
