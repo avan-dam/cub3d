@@ -81,7 +81,9 @@ The test file I have provided can be seen below.
 
 To run the example test file I have provided run the follow command in terminal.
 
-![Screenshot 2021-07-01 at 10 47 37](https://user-images.githubusercontent.com/61982496/124098538-ea703280-da5c-11eb-97ea-7d0d2e31257e.png)
+```
+./cub3d test.cub
+```
 
 The output will look like this.
 
