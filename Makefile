@@ -6,22 +6,38 @@
 #    By: avan-dam <avan-dam@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/03/09 11:50:01 by avan-dam      #+#    #+#                  #
-#    Updated: 2020/06/22 15:00:26 by avan-dam      ########   odam.nl          #
+#    Updated: 2021/07/01 10:23:09 by ambervandam   ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 
-SRCS = main.c ft_sort_my_map.c check_map_valid.c raycasting.c floor_ceiling.c \
-		zero_structs.c zero_structs_more.c moving.c texture.c start_pos.c \
-		sprite_me.c sprites_more.c raycasting_more.c ft_split_map.c cub_info.c \
-		moving_more.c main_more.c error.c save_bp.c more_map_valid.c
+SRCS =	srcs/main.c \
+		srcs/ft_sort_my_map.c \
+		srcs/check_map_valid.c \
+		srcs/raycasting.c \
+		srcs/floor_ceiling.c \
+		srcs/zero_structs.c \
+		srcs/zero_structs_more.c \
+		srcs/moving.c \
+		srcs/texture.c \
+		srcs/start_pos.c \
+		srcs/sprite_me.c \
+		srcs/sprites_more.c \
+		srcs/raycasting_more.c \
+		srcs/ft_split_map.c \
+		srcs/cub_info.c \
+		srcs/moving_more.c \
+		srcs/main_more.c \
+		srcs/error.c \
+		srcs/save_bp.c \
+		srcs/more_map_valid.c
 
 OFILES = $(SRCS:.c=.o)
 
-FLAGS = -Wall -Werror -Wextra -O3
+FLAGS = -Wall -Werror -Wextra -O3 -Wdeprecated-declarations
 
-INCLUDE = cub3d.h
+INCLUDE = srcs/cub3d.h
 
 all: $(NAME)
 
