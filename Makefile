@@ -6,7 +6,7 @@
 #    By: avan-dam <avan-dam@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/03/09 11:50:01 by avan-dam      #+#    #+#                  #
-#    Updated: 2021/07/01 10:42:32 by ambervandam   ########   odam.nl          #
+#    Updated: 2021/07/01 10:46:26 by ambervandam   ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,8 +35,7 @@ SRCS =	srcs/main.c \
 
 OFILES = $(SRCS:.c=.o)
 
-FLAGS = -Wall -Werror -Wextra -O3 -fsanitize=address
-#  -Wdeprecated-declarations
+FLAGS = -Wall -Werror -Wextra -O3 
 
 INCLUDE = srcs/cub3d.h
 
